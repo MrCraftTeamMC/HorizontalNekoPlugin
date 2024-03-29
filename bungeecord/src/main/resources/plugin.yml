@@ -1,0 +1,16 @@
+name: HorizontalNekoPlugin
+version: '${version}'
+main: xyz.tcbuildmc.minecraft.hnp.HorizontalNekoPlugin
+prefix: HorizontalNekoPlugin
+#softdepend:
+#  - PlaceholderAPI
+#  - Luckperms
+authors:
+  - TCBuildTeamMC
+  - Block_limr267
+  - Mr_zmh5
+  - SnowCutieOwO
+description: A Minecraft server-side Mod / Plugin aims to provide more mess features for Minecraft Servers.
+website: https://github.com/MrCraftTeamMC/HorizontalNekoPlugin
+commands:
+permissions:

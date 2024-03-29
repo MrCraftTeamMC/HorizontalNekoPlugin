@@ -1,0 +1,11 @@
+def modules = [
+        "bukkit",
+        "bungeecord",
+        "velocity"
+]
+
+modules.forEach { module ->
+    include ":$module"
+}
+
+rootProject.name = 'HorizontalNekoPlugin'

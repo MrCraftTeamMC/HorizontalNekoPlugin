@@ -1,0 +1,28 @@
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT"
+    compileOnly "me.clip:placeholderapi:2.11.5"
+    implementation "dev.jorel:commandapi-bukkit-shade:9.3.0"
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+shadowJar {
+    dependencies {
+        include dependency("dev.jorel:commandapi-bukkit-shade:9.3.0")
+    }
+
+    def reloc = { String from, String dest ->
+        relocate from, dest
+    }
+
+    reloc "dev.jorel.commandapi", "xyz.tcbuildmc.minecraft.hnp.commandapi"
+
+    zip64 true
+}
