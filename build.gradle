@@ -78,8 +78,8 @@ subprojects {
     dependencies {
         compileOnly "net.luckperms:api:5.4"
 
-        annotationProcessor 'org.projectlombok:lombok:1.18.30'
-        compileOnly 'org.projectlombok:lombok:1.18.30'
+        annotationProcessor 'org.projectlombok:lombok:1.18.32'
+        compileOnly 'org.projectlombok:lombok:1.18.32'
 
         implementation "com.electronwill.night-config:toml:3.6.7"
     }
