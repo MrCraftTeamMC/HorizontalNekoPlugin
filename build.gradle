@@ -63,10 +63,14 @@ allprojects {
     compileJava.dependsOn(clean)
 
     jar {
+        archiveClassifier.set "dev"
+
         zip64 true
     }
 
     sourcesJar {
+        archiveClassifier.set "dev-source"
+
         duplicatesStrategy DuplicatesStrategy.EXCLUDE
     }
 }
@@ -80,21 +84,10 @@ subprojects {
 
         annotationProcessor 'org.projectlombok:lombok:1.18.32'
         compileOnly 'org.projectlombok:lombok:1.18.32'
-
-        implementation "com.electronwill.night-config:toml:3.6.7"
     }
 
     shadowJar {
-        dependencies {
-            include dependency("com.electronwill.night-config:core:3.6.7")
-            include dependency("com.electronwill.night-config:toml:3.6.7")
-        }
-
-        def reloc = { String from, String dest ->
-            relocate from, dest
-        }
-
-        reloc "com.electronwill.nightconfig", "xyz.tcbuildmc.minecraft.hnp.nightconfig"
+        archiveClassifier.set null
 
         zip64 true
     }
@@ -114,20 +107,19 @@ subprojects {
 }
 
 tasks.register("buildArtifacts") {
-    logger.lifecycle(":step1 build subprojects")
-
     subprojects {
         dependsOn project.tasks.named("build").get()
         dependsOn project.tasks.named("shadowJar").get()
     }
 
     doFirst {
-        logger.lifecycle(":step2 clean buildLibs of rootProject")
+        logger.lifecycle(":executing 2 steps to build artifacts")
+        logger.lifecycle(":step1 clean buildLibs of rootProject")
         delete fileTree(rootProject.buildDir.toPath().resolve("libs")) {
             include '*'
         }
 
-        logger.lifecycle(":step3 copy buildLibs from subprojects")
+        logger.lifecycle(":step2 copy buildLibs from subprojects")
         subprojects {
             copy {
                 from(project.buildDir.toPath().resolve("libs")) {

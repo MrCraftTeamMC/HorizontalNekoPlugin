@@ -1,0 +1,16 @@
+dependencies {
+    implementation "com.electronwill.night-config:toml:3.6.7"
+}
+
+shadowJar {
+    dependencies {
+        include dependency("com.electronwill.night-config:core:3.6.7")
+        include dependency("com.electronwill.night-config:toml:3.6.7")
+    }
+
+    def reloc = { String from, String dest ->
+        relocate from, dest
+    }
+
+    reloc "com.electronwill.nightconfig", "xyz.tcbuildmc.common.nightconfig"
+}
