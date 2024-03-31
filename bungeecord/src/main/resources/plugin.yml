@@ -1,6 +1,6 @@
 name: HorizontalNekoPlugin
 version: '${version}'
-main: xyz.tcbuildmc.minecraft.hnp.HorizontalNekoPlugin
+main: xyz.tcbuildmc.minecraft.hnp.bungeecord.HorizontalNekoPlugin
 prefix: HorizontalNekoPlugin
 #softdepend:
 #  - PlaceholderAPI

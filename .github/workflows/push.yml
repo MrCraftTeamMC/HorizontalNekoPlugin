@@ -1,0 +1,64 @@
+name: Push Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: ${{ !startsWith(github.ref.name, 'refs/tags/') && contains(github.event.head_commit.message, '[build skip]') == false }}
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Setup jdk 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - uses: gradle/wrapper-validation-action@v2
+
+      - name: Fix Gradle permission
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew buildArtifacts --stacktrace --no-daemon
+
+      - name: Get short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Read Properties info
+        id: prop_info
+        uses: christian-draeger/read-properties@1.1.1
+        with:
+          path: gradle.properties
+          properties: "release_version"
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: TubeNekoPlugin-${{ env.SHORT_SHA }}
+          path: |
+            build/libs/*.jar
+
+      - name: Create GitHub Release
+        if: ${{ contains(github.event.head_commit.message, '[publish skip]') == false && contains(github.event.head_commit.message, 'release:') }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/libs/*.jar
+            !build/libs/*-dev.jar
+            !build/libs/*-dev-source.jar
+          name: ${{ steps.prop_info.outputs.release_version }}
+          tag_name: ${{ steps.prop_info.outputs.release_version }}-${{ env.SHORT_SHA }}
+          make_latest: "true"
+          target_commitish: ${{ github.event.ref }}
+          generate_release_notes: true
+          token: ${{ secrets.RELEASE_TOKEN }}

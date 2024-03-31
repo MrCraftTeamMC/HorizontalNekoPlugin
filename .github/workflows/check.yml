@@ -1,0 +1,31 @@
+name: PR Check
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    permissions:
+      contents: write
+      discussions: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Setup jdk 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - uses: gradle/wrapper-validation-action@v2
+
+      - name: Fix Gradle permission
+        run: chmod +x gradlew
+
+      - name: Test with Gradle
+        run: ./gradlew buildArtifacts test --stacktrace --no-daemon

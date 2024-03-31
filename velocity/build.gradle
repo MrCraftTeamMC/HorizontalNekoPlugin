@@ -1,6 +1,18 @@
 dependencies {
+    implementation project(path: ":common", configuration: "shadow")
+
     compileOnly "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
     annotationProcessor "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
 
     implementation 'net.william278:papiproxybridge:1.5'
+}
+
+shadowJar {
+    dependencies {
+        include project(":common")
+    }
+
+    def reloc = { String from, String dest ->
+        relocate from, dest
+    }
 }
