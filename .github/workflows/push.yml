@@ -2,6 +2,13 @@ name: Push Build
 
 on:
   push:
+    paths:
+      - ".github/workflows/**.yml"
+      - "**.java"
+      - "config.toml"
+      - "plugin.yml"
+      - "**.gradle"
+      - "gradle.properties"
   workflow_dispatch:
 
 jobs:
@@ -46,7 +53,10 @@ jobs:
         with:
           name: TubeNekoPlugin-${{ env.SHORT_SHA }}
           path: |
-            build/libs/*.jar
+            bukkit/build/libs/*.jar
+            bungeecord/build/libs/*.jar
+            common/build/libs/*.jar
+            velocity/build/libs/*.jar
 
       - name: Create GitHub Release
         if: ${{ contains(github.event.head_commit.message, '[publish skip]') == false && contains(github.event.head_commit.message, 'release:') }}
@@ -54,8 +64,6 @@ jobs:
         with:
           files: |
             build/libs/*.jar
-            !build/libs/*-dev.jar
-            !build/libs/*-dev-source.jar
           name: ${{ steps.prop_info.outputs.release_version }}
           tag_name: ${{ steps.prop_info.outputs.release_version }}-${{ env.SHORT_SHA }}
           make_latest: "true"

@@ -1,11 +1,24 @@
 dependencies {
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+
     implementation "com.electronwill.night-config:toml:3.6.7"
+
+    implementation "commons-io:commons-io:2.16.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.16.0"
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
 }
 
 shadowJar {
     dependencies {
         include dependency("com.electronwill.night-config:core:3.6.7")
         include dependency("com.electronwill.night-config:toml:3.6.7")
+        include dependency("commons-io:commons-io:2.16.0")
+        include dependency("com.fasterxml.jackson.core:jackson-annotations:2.16.0")
+        include dependency("com.fasterxml.jackson.core:jackson-core:2.16.0")
+        include dependency("com.fasterxml.jackson.core:jackson-databind:2.16.0")
+        include dependency("com.squareup.okio:okio:3.6.0")
+        include dependency("com.squareup.okio:okio-jvm:3.6.0")
+        include dependency("com.squareup.okhttp3:okhttp:4.12.0")
     }
 
     def reloc = { String from, String dest ->
@@ -13,4 +26,9 @@ shadowJar {
     }
 
     reloc "com.electronwill.nightconfig", "xyz.tcbuildmc.common.nightconfig"
+    reloc "org.apache.commons.io", "xyz.tcbuildmc.common.commons-io"
+    reloc "net.bytebuddy", "xyz.tcbuildmc.common.jackson.bytebuddy"
+    reloc "com.fasterxml.jackson", "xyz.tcbuildmc.common.jackson"
+    reloc "okhttp3", "xyz.tcbuildmc.common.okhttpclient"
+    reloc "okio", "xyz.tcbuildmc.common.okhttpclient.okio"
 }

@@ -71,6 +71,7 @@ allprojects {
     sourcesJar {
         archiveClassifier.set "dev-source"
 
+        zip64 true
         duplicatesStrategy DuplicatesStrategy.EXCLUDE
     }
 }
@@ -110,7 +111,7 @@ subprojects {
     publishing {
         publications {
             MavenJava(MavenPublication) {
-                artifactId = "HorizontalNekoPlugin-" + project.name
+                artifactId = "${rootProject.archives_base_name}-${project.name}"
                 from components.java
             }
         }
@@ -136,13 +137,16 @@ tasks.register("buildArtifacts") {
 
         logger.lifecycle(":step2 copy buildLibs from subprojects")
         subprojects {
-            copy {
-                from(project.buildDir.toPath().resolve("libs")) {
-                    include "*.jar"
-                }
+            if (project.name != "common") {
+                copy {
+                    from(project.buildDir.toPath().resolve("libs")) {
+                        include "*.jar"
+                        exclude "*-dev.jar", "*-dev-source.jar"
+                    }
 
-                into(rootProject.buildDir.toPath().resolve("libs"))
-                duplicatesStrategy DuplicatesStrategy.EXCLUDE
+                    into(rootProject.buildDir.toPath().resolve("libs"))
+                    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+                }
             }
         }
     }

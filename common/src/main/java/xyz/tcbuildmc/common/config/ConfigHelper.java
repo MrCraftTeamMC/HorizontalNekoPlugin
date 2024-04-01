@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @Getter
@@ -25,6 +26,15 @@ public abstract class ConfigHelper {
 
     public ConfigHelper(Path path, Class<?> clazz, String defaultConfigName) {
         this(path, clazz.getClassLoader(), defaultConfigName);
+    }
+
+    public ConfigHelper(String relationPath, Class<?> clazz, String defaultConfigName) {
+        this(Paths.get(relationPath), clazz, defaultConfigName);
+    }
+
+    public ConfigHelper(String relationPath, Class<?> clazz) {
+        this(Paths.get(relationPath), clazz,
+                relationPath.substring(relationPath.lastIndexOf('/') + 1));
     }
 
     public <T> T getContent(String path) {
