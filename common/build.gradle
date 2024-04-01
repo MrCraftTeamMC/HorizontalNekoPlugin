@@ -16,7 +16,7 @@ shadowJar {
         include dependency("com.fasterxml.jackson.core:jackson-annotations:2.16.0")
         include dependency("com.fasterxml.jackson.core:jackson-core:2.16.0")
         include dependency("com.fasterxml.jackson.core:jackson-databind:2.16.0")
-        include dependency("com.squareup.okio:okio:3.6.0")
+        include dependency("com.squareup.okio:okio:3.9.0")
         include dependency("com.squareup.okio:okio-jvm:3.6.0")
         include dependency("com.squareup.okhttp3:okhttp:4.12.0")
     }
